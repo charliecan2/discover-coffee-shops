@@ -2,6 +2,7 @@ import Head from 'next/head'
 import styles from '../styles/Home.module.css'
 
 import Header from '../components/Header'
+import Image from 'next/image'
 
 export default function Home() {
   const handleOnBannerBtnClick = () => {
@@ -18,6 +19,9 @@ export default function Home() {
 
       <main className={styles.main}>
         <Header buttonText="View stores nearby" handleOnClick={handleOnBannerBtnClick}/>
+        <div className={styles.heroImage} >
+          <Image src='/static/woman-with-coffee.png' height={750} width={1100}/>
+        </div>
       </main>
     </div>
   )

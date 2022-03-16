@@ -5,9 +5,6 @@ function MyApp({ Component, pageProps }) {
   return (
   <>
     <Component {...pageProps} />
-    <footer className={styles.footer}>
-      <p>Made with ❤️ by Carlos Cantu</p>
-    </footer>
   </>
   )
 }
