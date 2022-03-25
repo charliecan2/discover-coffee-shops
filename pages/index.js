@@ -27,9 +27,9 @@ export default function Home() {
         />
         <div className={styles.heroImage} >
           <Image 
-            src='/static/hero-image.png'
-            width={700}
-            height={400}
+            src='/static/mega-creator-1.png'
+            width={900}
+            height={450}
             alt='hero image'
             />
         </div>
