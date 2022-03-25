@@ -12,9 +12,8 @@
 }
 
 .heroImage {
-  position: relative;
-  top: -350px;
-  left: 100px;
+  position: absolute;
+  top: 0px;
   z-index: 1;
 }
 
