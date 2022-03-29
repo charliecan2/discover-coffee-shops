@@ -7,7 +7,18 @@ import Image from 'next/image'
 
 import data from '../data/coffee-stores.json'
 
-export default function Home() {
+export async function getStaticProps(context) {
+  console.log("getStaticProps")
+  return {
+    props: {
+      coffeeStores: data
+    }, // will be passed to the page component as props
+  }
+}
+
+export default function Home(props) {
+  console.log("props", props)
+
   const handleOnBannerBtnClick = () => {
     console.log("Hello there, General Kenobi")
   }
@@ -33,11 +44,13 @@ export default function Home() {
             alt='hero image'
             />
         </div>
-
         <div className={styles.sectionWrapper}>
-          <h2 className={styles.heading2}>Stores Near Me</h2>
+          {props.coffeeStores.length > 0 ? 
+          <h2 className={styles.heading2}>Stores Near Me</h2> :
+          <h2 className={styles.heading2}>No Coffee Stores found!</h2>
+          }
           <div className={styles.cardLayout}>
-            {data.map(coffeeStore => (
+            {props.coffeeStores.map(coffeeStore => (
               <Card
                 key={coffeeStore.id}
                 href={`/coffee-store/${coffeeStore.id}`}
