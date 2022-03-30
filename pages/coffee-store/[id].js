@@ -1,10 +1,12 @@
 import { useRouter } from "next/router"
 import Link from "next/link";
+import Head from "next/head";
 
 import data from '../../data/coffee-stores.json'
 
 export async function getStaticProps({params}) {
-  console.log(params)
+  console.log(params);
+
   return {
     props: {
       coffeeStore: data.find(coffeeStore => {
@@ -15,11 +17,12 @@ export async function getStaticProps({params}) {
 }
 
 export function getStaticPaths(){
+  const paths = data.map(store => {
+    return { params: { id: store.id.toString() }}
+  })
+
   return {
-    paths: [
-      { params: {id: "0"} },
-      { params: {id: "1"} }
-    ],
+    paths: paths,
     fallback: true
   }
 }
@@ -32,11 +35,16 @@ export default function CoffeeStore(props) {
     return <div>Loading...</div>
   }
 
+  const { address, name, neighbourhood } = props.coffeeStore
+
   return (
     <div>
-      <div>Coffee Store page {router.query.id}</div>
-      <p>{props.coffeeStore.address}</p>
-      <p>{props.coffeeStore.name}</p>
+      <Head>
+        <title>{name}</title>
+      </Head>
+      <p>{address}</p>
+      <p>{name}</p>
+      <p>{neighbourhood}</p>
       <Link href="/">
         <a>Back to Home</a>
       </Link>
