@@ -72,10 +72,12 @@ export default function CoffeeStore(props) {
             <Image src={places} width={24} height={24}/>
             <p className={styles.text}>{address}</p>
           </div>
-          <div className={styles.iconWrapper}>
-            <Image src={nearMe} width={24} height={24}/>
-            <p className={styles.text}>{neighborhood}</p>
-          </div>
+          {neighborhood && (
+            <div className={styles.iconWrapper}>
+              <Image src={nearMe} width={24} height={24}/>
+              <p className={styles.text}>{neighborhood}</p>
+            </div>
+          )}
           <div className={styles.iconWrapper}>
             <Image src={star} width={24} height={24}/>
             <p className={styles.text}>1</p>
