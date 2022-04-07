@@ -7,24 +7,27 @@ import classNames from "classnames";
 import nearMe from '../../public/static/icons/nearMe.svg'
 import places from '../../public/static/icons/places.svg'
 import star from '../../public/static/icons/star.svg'
-
 import styles from '../../styles/coffee-store.module.css'
 
-import data from '../../data/coffee-stores.json'
+import { fetchCoffeeStores } from "../../lib/coffee-stores";
 
 export async function getStaticProps({params}) {
+  const coffeeStores = await fetchCoffeeStores();
+
   return {
     props: {
-      coffeeStore: data.find(coffeeStore => {
-        return coffeeStore.id == params.id
+      coffeeStore: coffeeStores.find(coffeeStore => {
+        return coffeeStore.fsq_id == params.id
       })
     }, // will be passed to the page component as props
   }
 }
 
-export function getStaticPaths(){
-  const paths = data.map(store => {
-    return { params: { id: store.id.toString() }}
+export async function getStaticPaths(){
+  const coffeeStores = await fetchCoffeeStores();
+
+  const paths = coffeeStores.map(coffeeStore => {
+    return { params: { id: coffeeStore.fsq_id.toString() }}
   })
 
   return {
@@ -44,7 +47,8 @@ export default function CoffeeStore(props) {
     return <div>Loading...</div>
   }
 
-  const { address, name, neighbourhood, imgUrl } = props.coffeeStore
+  const { name } = props.coffeeStore
+  const { address, neighborhood  } = props.coffeeStore.location
 
   return (
     <div className={styles.layout}>
@@ -61,7 +65,7 @@ export default function CoffeeStore(props) {
           <div className={styles.nameWrapper}>
             <h1 className={styles.name}>{name}</h1>
           </div>
-          <Image className={styles.storeImg} src={imgUrl} width={600} height={360} alt={name}/>
+          <Image className={styles.storeImg} src={'https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80'} width={600} height={360} alt={name}/>
         </div>
         <div className={classNames('glass', styles.col2)}>
           <div className={styles.iconWrapper}>
@@ -70,7 +74,7 @@ export default function CoffeeStore(props) {
           </div>
           <div className={styles.iconWrapper}>
             <Image src={nearMe} width={24} height={24}/>
-            <p className={styles.text}>{neighbourhood}</p>
+            <p className={styles.text}>{neighborhood}</p>
           </div>
           <div className={styles.iconWrapper}>
             <Image src={star} width={24} height={24}/>
