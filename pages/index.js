@@ -5,13 +5,16 @@ import Header from '../components/Header'
 import Card from '../components/Card'
 import Image from 'next/image'
 
-import data from '../data/coffee-stores.json'
+import { fetchCoffeeStores } from '../lib/coffee-stores'
 
 export async function getStaticProps(context) {
   console.log("getStaticProps")
+
+  const coffeeStores = await fetchCoffeeStores();
+
   return {
     props: {
-      coffeeStores: data
+      coffeeStores: coffeeStores
     }, // will be passed to the page component as props
   }
 }
@@ -52,11 +55,11 @@ export default function Home(props) {
           <div className={styles.cardLayout}>
             {props.coffeeStores.map(coffeeStore => (
               <Card
-                key={coffeeStore.id}
-                href={`/coffee-store/${coffeeStore.id}`}
+                key={coffeeStore.fsq_id}
+                href={`/coffee-store/${coffeeStore.fsq_id}`}
                 cardLink={coffeeStore.websiteUrl}
                 name={coffeeStore.name}
-                imgUrl={coffeeStore.imgUrl}
+                imgUrl={'https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80'}
               />
               )
             )}
