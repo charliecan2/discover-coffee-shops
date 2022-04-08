@@ -5,26 +5,26 @@ import Header from '../components/Header'
 import Card from '../components/Card'
 import Image from 'next/image'
 
-import { fetchCoffeeStores } from '../lib/coffee-stores'
+import { fetchCoffeeStores, getCoffeeStorePhotos } from '../lib/coffee-stores';
 
 export async function getStaticProps(context) {
-  console.log("getStaticProps")
-
   const coffeeStores = await fetchCoffeeStores();
+  const photoUrls = await getCoffeeStorePhotos();
 
   return {
     props: {
-      coffeeStores: coffeeStores
+      coffeeStores: coffeeStores,
+      imgUrl: photoUrls
     }, // will be passed to the page component as props
   }
 }
 
 export default function Home(props) {
-  console.log("props", props)
-
   const handleOnBannerBtnClick = () => {
     console.log("Hello there, General Kenobi")
   }
+
+  console.log(props.imgUrl)
 
   return (
     <div className={styles.container}>
@@ -53,13 +53,13 @@ export default function Home(props) {
           <h2 className={styles.heading2}>No Coffee Stores found!</h2>
           }
           <div className={styles.cardLayout}>
-            {props.coffeeStores.map(coffeeStore => (
+            {props.coffeeStores.map((coffeeStore, index) => (
               <Card
                 key={coffeeStore.fsq_id}
                 href={`/coffee-store/${coffeeStore.fsq_id}`}
                 cardLink={coffeeStore.websiteUrl}
                 name={coffeeStore.name}
-                imgUrl={'https://images.unsplash.com/photo-1504753793650-d4a2b783c15e?ixid=MnwxMjA3fDB8MHxwaG90by1wYWdlfHx8fGVufDB8fHx8&ixlib=rb-1.2.1&auto=format&fit=crop&w=2000&q=80'}
+                imgUrl={props.imgUrl[index]}
               />
               )
             )}
