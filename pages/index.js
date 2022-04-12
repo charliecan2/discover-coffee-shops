@@ -1,11 +1,13 @@
 import Head from 'next/head'
+import { useState } from 'react';
 import styles from '../styles/Home.module.css'
 
 import Header from '../components/Header'
 import Card from '../components/Card'
 import Image from 'next/image'
 
-import { fetchCoffeeStores, getCoffeeStorePhotos } from '../lib/coffee-stores';
+import { fetchCoffeeStores } from '../lib/coffee-stores';
+import useTrackLocation from '../hooks/use-track-location'
 
 export async function getStaticProps(context) {
   const coffeeStores = await fetchCoffeeStores();
@@ -18,11 +20,13 @@ export async function getStaticProps(context) {
 }
 
 export default function Home(props) {
+  const { handleTrackLocation, latLong, locationErrorMessage } = useTrackLocation
+
   const handleOnBannerBtnClick = () => {
     console.log("Hello there, General Kenobi")
   }
 
-  console.log(props.imgUrl)
+  console.log({ latLong, locationErrorMessage })
 
   return (
     <div className={styles.container}>
@@ -51,10 +55,10 @@ export default function Home(props) {
           <h2 className={styles.heading2}>No Coffee Stores found!</h2>
           }
           <div className={styles.cardLayout}>
-            {props.coffeeStores.map((coffeeStore, index) => (
+            {props.coffeeStores.map(coffeeStore => (
               <Card
-                key={coffeeStore.fsq_id}
-                href={`/coffee-store/${coffeeStore.fsq_id}`}
+                key={coffeeStore.id}
+                href={`/coffee-store/${coffeeStore.id}`}
                 cardLink={coffeeStore.websiteUrl}
                 name={coffeeStore.name}
                 imgUrl={coffeeStore.photoUrl}
