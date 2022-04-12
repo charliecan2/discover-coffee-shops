@@ -17,7 +17,7 @@ export async function getStaticProps({params}) {
   return {
     props: {
       coffeeStore: coffeeStores.find(coffeeStore => {
-        return coffeeStore.fsq_id == params.id
+        return coffeeStore.id == params.id
       })
     }, // will be passed to the page component as props
   }
@@ -27,7 +27,7 @@ export async function getStaticPaths(){
   const coffeeStores = await fetchCoffeeStores();
 
   const paths = coffeeStores.map(coffeeStore => {
-    return { params: { id: coffeeStore.fsq_id.toString() }}
+    return { params: { id: coffeeStore.id.toString() }}
   })
 
   return {
@@ -47,8 +47,7 @@ export default function CoffeeStore(props) {
     return <div>Loading...</div>
   }
 
-  const { name, photoUrl } = props.coffeeStore
-  const { address, neighborhood  } = props.coffeeStore.location
+  const { name, photoUrl, address, neighborhood } = props.coffeeStore
 
   return (
     <div className={styles.layout}>
