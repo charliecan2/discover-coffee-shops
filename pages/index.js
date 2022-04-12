@@ -20,10 +20,11 @@ export async function getStaticProps(context) {
 }
 
 export default function Home(props) {
-  const { handleTrackLocation, latLong, locationErrorMessage } = useTrackLocation
+  const { handleTrackLocation, latLong, locationErrorMessage, findingLocation } = useTrackLocation();
 
   const handleOnBannerBtnClick = () => {
     console.log("Hello there, General Kenobi")
+    handleTrackLocation();
   }
 
   console.log({ latLong, locationErrorMessage })
@@ -38,9 +39,11 @@ export default function Home(props) {
 
       <main className={styles.main}>
         <Header 
-          buttonText="View stores nearby" 
+          buttonText={findingLocation ? "Locating...": "View stores nearby"}
           handleOnClick={handleOnBannerBtnClick}
         />
+        {locationErrorMessage &&
+        <p>Something went wrong: {locationErrorMessage}</p>}
         <div className={styles.heroImage} >
           <Image 
             src='/static/mega-creator-1.png'
