@@ -9,12 +9,10 @@ import { fetchCoffeeStores, getCoffeeStorePhotos } from '../lib/coffee-stores';
 
 export async function getStaticProps(context) {
   const coffeeStores = await fetchCoffeeStores();
-  const photoUrls = await getCoffeeStorePhotos();
 
   return {
     props: {
-      coffeeStores: coffeeStores,
-      imgUrl: photoUrls
+      coffeeStores: coffeeStores
     }, // will be passed to the page component as props
   }
 }
@@ -59,7 +57,7 @@ export default function Home(props) {
                 href={`/coffee-store/${coffeeStore.fsq_id}`}
                 cardLink={coffeeStore.websiteUrl}
                 name={coffeeStore.name}
-                imgUrl={props.imgUrl[index]}
+                imgUrl={coffeeStore.photoUrl}
               />
               )
             )}
