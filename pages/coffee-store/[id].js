@@ -13,12 +13,13 @@ import { fetchCoffeeStores } from "../../lib/coffee-stores";
 
 export async function getStaticProps({params}) {
   const coffeeStores = await fetchCoffeeStores();
+  const findCoffeeStoreById = coffeeStores.find(coffeeStore => {
+    return coffeeStore.id == params.id
+  })
 
   return {
     props: {
-      coffeeStore: coffeeStores.find(coffeeStore => {
-        return coffeeStore.id == params.id
-      })
+      coffeeStore: findCoffeeStoreById? findCoffeeStoreById : {}
     }, // will be passed to the page component as props
   }
 }

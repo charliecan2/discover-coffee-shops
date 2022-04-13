@@ -1,5 +1,5 @@
 import Head from 'next/head'
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 import styles from '../styles/Home.module.css'
 
 import Header from '../components/Header'
@@ -27,7 +27,23 @@ export default function Home(props) {
     handleTrackLocation();
   }
 
+  const [coffeeStores, setCoffeeStores] = useState("")
+  const [coffeeStoresError, setCoffeeStoresError] = useState(null)
+
   console.log({ latLong, locationErrorMessage })
+
+  useEffect(async () => {
+    if(latLong){
+      try {
+        const fetchedCoffeeStores = await fetchCoffeeStores(latLong, 30)
+        setCoffeeStores(fetchedCoffeeStores)
+        console.log({ fetchedCoffeeStores })
+      } catch (error) {
+        console.log({error})
+        setCoffeeStoresError(error)
+      }
+    }
+  },[latLong])
 
   return (
     <div className={styles.container}>
@@ -44,6 +60,8 @@ export default function Home(props) {
         />
         {locationErrorMessage &&
         <p>Something went wrong: {locationErrorMessage}</p>}
+        {coffeeStoresError &&
+        <p>Something went wrong: {coffeeStoresError}</p>}
         <div className={styles.heroImage} >
           <Image 
             src='/static/mega-creator-1.png'
@@ -52,24 +70,39 @@ export default function Home(props) {
             alt='hero image'
             />
         </div>
-        <div className={styles.sectionWrapper}>
-          {props.coffeeStores.length > 0 ? 
-          <h2 className={styles.heading2}>Stores Near Me</h2> :
-          <h2 className={styles.heading2}>No Coffee Stores found!</h2>
-          }
-          <div className={styles.cardLayout}>
-            {props.coffeeStores.map(coffeeStore => (
-              <Card
-                key={coffeeStore.id}
-                href={`/coffee-store/${coffeeStore.id}`}
-                cardLink={coffeeStore.websiteUrl}
-                name={coffeeStore.name}
-                imgUrl={coffeeStore.photoUrl}
-              />
-              )
-            )}
+        {coffeeStores.length ?
+          <div className={styles.sectionWrapper}>
+            <h2 className={styles.heading2}>Stores Near Me</h2> 
+            <div className={styles.cardLayout}>
+              {coffeeStores.map(coffeeStore => (
+                <Card
+                  key={coffeeStore.id}
+                  href={`/coffee-store/${coffeeStore.id}`}
+                  cardLink={coffeeStore.websiteUrl}
+                  name={coffeeStore.name}
+                  photoUrl={coffeeStore.photoUrl}
+                />
+                )
+              )}
+            </div>
           </div>
-        </div>
+        :
+          <div className={styles.sectionWrapper}>
+            <h2 className={styles.heading2}>Stores Near Me</h2> 
+            <div className={styles.cardLayout}>
+              {props.coffeeStores.map(coffeeStore => (
+                <Card
+                  key={coffeeStore.id}
+                  href={`/coffee-store/${coffeeStore.id}`}
+                  cardLink={coffeeStore.websiteUrl}
+                  name={coffeeStore.name}
+                  photoUrl={coffeeStore.photoUrl}
+                />
+                )
+              )}
+            </div>
+          </div>
+        }
       </main>
     </div>
   )
