@@ -27,6 +27,7 @@ const StoreProvider = ({ children }) => {
   };
 
   const [state, dispatch] = useReducer(storeReducer, initialState);
+  
   return (
     <StoreContext.Provider value={{ state, dispatch }}>
       {children}
