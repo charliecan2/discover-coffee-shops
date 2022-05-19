@@ -9,9 +9,12 @@ export default async function createCoffeeStore(req, res){
   console.log({ req })
 
   if(req.method = "POST"){
+
+    const { id, name, address, neighborhood, voting, imgUrl } = req.body;
+
     try {
       const findCoffeeStoreRecords = await table.select({
-        filterByFormula: `id="1"`
+        filterByFormula: `id=${id}`
       }).firstPage()
 
       console.log({findCoffeeStoreRecords})
@@ -30,12 +33,12 @@ export default async function createCoffeeStore(req, res){
           [
             {
               "fields": {
-                id: "1",
-                name: "My Favorite Coffee Store",
-                address: "101 North Street",
-                neighborhood: "Some Neighborhood",
-                voting: 200,
-                imgUrl: "https://images.unsplash.com/photo-1453614512568-c4024d13c247?ixlib=rb-1.2.1&ixid=MnwxMjA3fDB8MHxzZWFyY2h8MXx8Y29mZmVlJTIwc2hvcHxlbnwwfHwwfHw%3D&w=1000&q=80"
+                id,
+                name,
+                address,
+                neighborhood,
+                voting,
+                imgUrl
               }
             }
           ]
